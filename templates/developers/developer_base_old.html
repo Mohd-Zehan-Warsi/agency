@@ -1,0 +1,613 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <title>
+        {{ developer.name }} | {{ developer.designation }}
+    </title>
+
+    <style>
+         :root {
+            --bg: #07080d;
+            --card: #11131c;
+            --text: #ffffff;
+            --muted: #9da3b4;
+            --primary: #7c3aed;
+            --cyan: #00d4ff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .container {
+            width: min(1180px, calc(100% - 32px));
+            margin: auto;
+        }
+        /* =========================
+           NAVBAR
+        ========================== */
+        
+        .developer-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(7, 8, 13, .88);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid #ffffff12;
+        }
+        
+        .developer-nav-inner {
+            min-height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* Logo */
+        
+        .developer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        
+        .developer-logo-mark {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: linear-gradient( 135deg, var(--primary), var(--cyan));
+        }
+        /* Desktop links */
+        
+        .developer-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+        }
+        
+        .developer-links a {
+            color: #cfd2dc;
+            font-size: .9rem;
+            transition: .25s;
+        }
+        
+        .developer-links a:hover {
+            color: #ffffff;
+        }
+        /* Contact button */
+        
+        .developer-nav-btn {
+            padding: 10px 17px;
+            border-radius: 10px;
+            background: linear-gradient( 135deg, var(--primary), #9b5cff);
+            font-weight: 700;
+        }
+        /* Mobile button */
+        
+        .developer-menu-btn {
+            display: none;
+            padding: 9px 12px;
+            border: 1px solid #ffffff18;
+            border-radius: 9px;
+            background: var(--card);
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        /* Mobile menu */
+        
+        .developer-mobile-menu {
+            display: none;
+            position: absolute;
+            top: 74px;
+            left: 11px;
+            right: 11px;
+            padding: 12px;
+            background: rgba(12, 14, 22, .98);
+            border: 1px solid #ffffff18;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+        }
+        
+        .developer-mobile-menu.open {
+            display: block;
+        }
+        
+        .developer-mobile-menu a {
+            display: block;
+            padding: 13px 14px;
+            border-radius: 10px;
+            color: #dfe2eb;
+        }
+        
+        .developer-mobile-menu a:hover {
+            background: #ffffff08;
+            color: #ffffff;
+        }
+        
+        .developer-mobile-menu .mobile-contact {
+            margin-top: 6px;
+            text-align: center;
+            background: linear-gradient( 135deg, var(--primary), #9b5cff);
+            color: #ffffff;
+            font-weight: 700;
+        }
+        /* =========================
+           FOOTER
+        ========================== */
+        
+        .developer-footer {
+            border-top: 1px solid #ffffff12;
+            padding: 55px 0 25px;
+            margin-top: 40px;
+        }
+        
+        .developer-footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .developer-footer h3 {
+            margin-bottom: 15px;
+        }
+        
+        .developer-footer p {
+            color: var(--muted);
+            max-width: 450px;
+        }
+        
+        .developer-footer-links {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+        
+        .developer-footer-links a {
+            color: var(--muted);
+            font-size: .9rem;
+            transition: .2s;
+        }
+        
+        .developer-footer-links a:hover {
+            color: #ffffff;
+        }
+        
+        .developer-socials {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .developer-socials a {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border: 1px solid #ffffff18;
+            border-radius: 10px;
+            color: #cfd2dc;
+            background: #ffffff05;
+            transition: .25s;
+        }
+        
+        .developer-socials a:hover {
+            transform: translateY(-3px);
+            color: #ffffff;
+            background: #7c3aed22;
+            border-color: #7c3aed88;
+        }
+        
+        .developer-copyright {
+            text-align: center;
+            border-top: 1px solid #ffffff12;
+            margin-top: 40px;
+            padding-top: 20px;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+        /* =========================
+           RESPONSIVE
+        ========================== */
+        
+        @media (max-width: 991px) {
+            .developer-links,
+            .developer-nav-btn {
+                display: none;
+            }
+            .developer-menu-btn {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .developer-footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="{% static 'css/developers/style.css' %}"> {% block developer_extra_css %} {% endblock developer_extra_css %}
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         DEVELOPER NAVBAR
+    ========================== -->
+
+    <header class="developer-nav">
+
+        <div class="container developer-nav-inner">
+
+            <a href="{% url 'developers:detail' developer.slug %}" class="developer-logo">
+
+                <span class="developer-logo-mark">
+                    {{ developer.name|first|upper }}
+                </span> {{ developer.name }}
+
+            </a>
+
+
+            <ul class="developer-links">
+
+                <li>
+                    <a href="#home">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#about">
+                        About
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#skills">
+                        Skills
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#projects">
+                        Projects
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#experience">
+                        Experience
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#education">
+                        Education
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#contact">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+
+            {% if developer.email %}
+
+            <a href="mailto:{{ developer.email }}" class="developer-nav-btn">
+                Hire Me →
+            </a> {% endif %}
+
+
+            <button class="developer-menu-btn" id="developerMenuBtn" aria-label="Open menu" aria-expanded="false">
+                ☰
+            </button>
+
+
+            <div class="developer-mobile-menu" id="developerMobileMenu">
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
+
+                <a href="#skills">
+                    Skills
+                </a>
+
+                <a href="#projects">
+                    Projects
+                </a>
+
+                <a href="#experience">
+                    Experience
+                </a>
+
+                <a href="#education">
+                    Education
+                </a>
+
+                <a href="#contact">
+                    Contact
+                </a> {% if developer.email %}
+
+                <a href="mailto:{{ developer.email }}" class="mobile-contact">
+                    Hire Me →
+                </a> {% endif %}
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE CONTENT
+    ========================== -->
+
+    {% block content %} {% endblock content %}
+
+
+    <!-- =========================
+         DEVELOPER FOOTER
+    ========================== -->
+
+    <footer class="developer-footer">
+
+        <div class="container">
+
+            <div class="developer-footer-grid">
+
+
+                <div>
+
+                    <div class="developer-logo">
+
+                        <span class="developer-logo-mark">
+                            {{ developer.name|first|upper }}
+                        </span> {{ developer.name }}
+
+                    </div>
+
+                    <p style="margin-top: 14px;">
+
+                        {{ developer.bio|default:"Professional developer building modern digital experiences." }}
+
+                    </p>
+
+
+                    <div class="developer-socials">
+
+                        {% if developer.github %}
+
+                        <a href="{{ developer.github }}" target="_blank" rel="noopener" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+
+                        {% endif %} {% if developer.linkedin %}
+
+                        <a href="{{ developer.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+
+                        {% endif %} {% if developer.instagram %}
+
+                        <a href="{{ developer.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+
+                        {% endif %} {% if developer.website %}
+
+                        <a href="{{ developer.website }}" target="_blank" rel="noopener" aria-label="Website">
+                            <i class="fas fa-globe"></i>
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Quick Links
+                    </h3>
+
+                    <ul class="developer-footer-links">
+
+                        <li>
+                            <a href="#home">
+                                Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#about">
+                                About
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#skills">
+                                Skills
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#projects">
+                                Projects
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Contact
+                    </h3>
+
+                    <ul class="developer-footer-links">
+
+                        {% if developer.email %}
+
+                        <li>
+                            <a href="mailto:{{ developer.email }}">
+                                <i class="fas fa-envelope"></i> Email
+                            </a>
+                        </li>
+
+                        {% endif %} {% if developer.phone %}
+
+                        <li>
+                            <a href="tel:{{ developer.phone }}">
+                                <i class="fas fa-phone"></i> {{ developer.phone }}
+                            </a>
+                        </li>
+
+                        {% endif %} {% if developer.location %}
+
+                        <li>
+                            <i class="fas fa-location-dot"></i> {{ developer.location }}
+                        </li>
+
+                        {% endif %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+            <div class="developer-copyright">
+
+                © {% now "Y" %} {{ developer.name }}. All rights reserved.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script>
+        const developerMenuBtn =
+            document.getElementById("developerMenuBtn");
+
+        const developerMobileMenu =
+            document.getElementById("developerMobileMenu");
+
+
+        developerMenuBtn.addEventListener("click", () => {
+
+            const isOpen =
+                developerMobileMenu.classList.toggle("open");
+
+            developerMenuBtn.setAttribute(
+                "aria-expanded",
+                isOpen
+            );
+
+            developerMenuBtn.textContent =
+                isOpen ? "✕" : "☰";
+
+        });
+
+
+        document
+            .querySelectorAll(".developer-mobile-menu a")
+            .forEach(link => {
+
+                link.addEventListener("click", () => {
+
+                    developerMobileMenu
+                        .classList
+                        .remove("open");
+
+                    developerMenuBtn
+                        .setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    developerMenuBtn.textContent = "☰";
+
+                });
+
+            });
+
+
+        window.addEventListener("resize", () => {
+
+            if (window.innerWidth > 991) {
+
+                developerMobileMenu
+                    .classList
+                    .remove("open");
+
+                developerMenuBtn
+                    .setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                developerMenuBtn.textContent = "☰";
+
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

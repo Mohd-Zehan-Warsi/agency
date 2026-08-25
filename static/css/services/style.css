@@ -1,0 +1,789 @@
+/* =========================================================
+   SERVICE DETAIL PAGE
+   ========================================================= */
+
+.service-detail {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    color: #fff;
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+   ========================================================= */
+
+.service-detail::before {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    top: 0;
+    left: -260px;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, 0.10);
+    filter: blur(120px);
+    pointer-events: none;
+}
+
+.service-detail::after {
+    content: "";
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    right: -220px;
+    top: 40%;
+    border-radius: 50%;
+    background: rgba(0, 212, 255, 0.07);
+    filter: blur(110px);
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.service-detail-hero {
+    position: relative;
+    padding: 110px 0 80px;
+    z-index: 1;
+}
+
+.service-detail-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 60px;
+    align-items: center;
+}
+
+
+/* =========================================================
+   SERVICE INFORMATION
+   ========================================================= */
+
+.service-detail-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    border-radius: 50px;
+    background: rgba(124, 58, 237, .09);
+    border: 1px solid rgba(124, 58, 237, .35);
+    color: #d7c2ff;
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.service-detail-title {
+    margin: 0;
+    max-width: 800px;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 1.02;
+    letter-spacing: -.055em;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.service-detail-title span {
+    background: linear-gradient( 90deg, #ffffff, #9b5cff, #00d4ff);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+
+/* =========================================================
+   SHORT DESCRIPTION
+   ========================================================= */
+
+.service-short-description {
+    max-width: 680px;
+    margin: 25px 0 0;
+    color: var(--muted);
+    font-size: 1.08rem;
+    line-height: 1.85;
+}
+
+
+/* =========================================================
+   SERVICE VISUAL
+   ========================================================= */
+
+.service-visual {
+    position: relative;
+    width: 100%;
+    min-height: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, .10);
+    background: radial-gradient( circle at center, rgba(124, 58, 237, .30), transparent 45%), rgba(255, 255, 255, .025);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+}
+
+
+/* =========================================================
+   DECORATIVE CIRCLE
+   ========================================================= */
+
+.service-visual::before {
+    content: "";
+    position: absolute;
+    width: 270px;
+    height: 270px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(124, 58, 237, .28);
+    box-shadow: 0 0 70px rgba(124, 58, 237, .12);
+    animation: servicePulse 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   SECOND GLOW
+   ========================================================= */
+
+.service-visual::after {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(124, 58, 237, .12);
+    filter: blur(35px);
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ACTUAL SERVICE IMAGE BOX
+   ========================================================= */
+
+.service-detail-image {
+    position: relative;
+    z-index: 5;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 30px;
+    background: linear-gradient( 145deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .025));
+    border: 1px solid rgba(255, 255, 255, .13);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .30), 0 0 65px rgba(124, 58, 237, .25);
+    animation: serviceFloat 4s ease-in-out infinite;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   SERVICE IMAGE
+   ========================================================= */
+
+.service-detail-image img {
+    display: block;
+    width: 125px;
+    height: 125px;
+    max-width: 75%;
+    max-height: 75%;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
+    object-position: center;
+    filter: drop-shadow( 0 15px 25px rgba(0, 0, 0, .30));
+    transition: transform .35s ease, filter .35s ease;
+}
+
+
+/* =========================================================
+   IMAGE HOVER
+   ========================================================= */
+
+.service-detail-image:hover img {
+    transform: scale(1.10);
+    filter: drop-shadow( 0 20px 35px rgba(124, 58, 237, .45));
+}
+
+
+/* =========================================================
+   FALLBACK ICON
+   ========================================================= */
+
+.service-main-icon {
+    position: relative;
+    z-index: 5;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    background: linear-gradient( 135deg, var(--p), var(--cyan));
+    color: #fff;
+    font-size: 3.5rem;
+    box-shadow: 0 0 70px rgba(124, 58, 237, .45);
+    animation: serviceFloat 4s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   CONTENT SECTION
+   ========================================================= */
+
+.service-content-section {
+    position: relative;
+    padding: 80px 0;
+    z-index: 1;
+}
+
+.service-content-grid {
+    display: grid;
+    grid-template-columns: 1.4fr .6fr;
+    gap: 35px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   DESCRIPTION CARD
+   ========================================================= */
+
+.service-description-card {
+    padding: 40px;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, .08);
+    background: linear-gradient( 145deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .015));
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .18);
+}
+
+.service-description-card h2 {
+    margin: 0 0 22px;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    line-height: 1.1;
+}
+
+.service-description-card h2 span {
+    background: linear-gradient( 90deg, #9b5cff, #00d4ff);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.service-description {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.9;
+}
+
+.service-description p {
+    margin: 0 0 18px;
+}
+
+.service-description p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   SERVICE INFO CARD
+   ========================================================= */
+
+.service-info-card {
+    position: sticky;
+    top: 100px;
+    padding: 28px;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .025);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.service-info-card h3 {
+    margin: 0 0 20px;
+    font-size: 1.25rem;
+}
+
+
+/* =========================================================
+   INFO ITEM
+   ========================================================= */
+
+.service-info-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+.service-info-item:last-child {
+    border-bottom: none;
+}
+
+.service-info-icon {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(124, 58, 237, .10);
+    border: 1px solid rgba(124, 58, 237, .18);
+    color: #fff;
+}
+
+.service-info-item small {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--muted);
+    font-size: .75rem;
+}
+
+.service-info-item strong {
+    font-size: .9rem;
+}
+
+
+/* =========================================================
+   TECHNOLOGIES SECTION
+   ========================================================= */
+
+.service-technologies {
+    position: relative;
+    padding: 80px 0;
+    z-index: 1;
+}
+
+.service-section-heading {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.service-section-heading .badge {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.service-section-heading h2 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+}
+
+.service-section-heading p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   TECHNOLOGY GRID
+   ========================================================= */
+
+.service-tech-grid {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr));
+    gap: 18px;
+}
+
+
+/* =========================================================
+   TECHNOLOGY CARD
+   ========================================================= */
+
+.service-tech-card {
+    min-height: 145px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .025);
+    transition: transform .3s ease, border-color .3s ease, background .3s ease, box-shadow .3s ease;
+}
+
+.service-tech-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(124, 58, 237, .4);
+    background: rgba(124, 58, 237, .055);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, .15), 0 0 30px rgba(124, 58, 237, .08);
+}
+
+
+/* =========================================================
+   TECHNOLOGY IMAGE
+   ========================================================= */
+
+.service-tech-card img {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 13px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transition: transform .3s ease;
+}
+
+.service-tech-card:hover img {
+    transform: scale(1.08) translateY(-3px);
+}
+
+.service-tech-card h3 {
+    margin: 0;
+    font-size: .95rem;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.service-detail-cta {
+    position: relative;
+    padding: 70px 0 100px;
+    z-index: 1;
+}
+
+.service-cta-box {
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 26px;
+    border: 1px solid rgba(124, 58, 237, .35);
+    background: radial-gradient( circle at 80% 20%, rgba(0, 212, 255, .10), transparent 35%), linear-gradient( 135deg, rgba(124, 58, 237, .20), rgba(255, 255, 255, .025));
+}
+
+.service-cta-box h2 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+}
+
+.service-cta-box p {
+    max-width: 650px;
+    margin: 0 auto 25px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.service-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 45px;
+    padding: 12px 20px;
+    border-radius: 11px;
+    border: 1px solid rgba(255, 255, 255, .10);
+    background: rgba(255, 255, 255, .025);
+    color: #fff;
+    text-decoration: none;
+    transition: transform .3s ease, background .3s ease, border-color .3s ease;
+}
+
+.service-back:hover {
+    transform: translateY(-3px);
+    background: rgba(124, 58, 237, .12);
+    border-color: rgba(124, 58, 237, .40);
+}
+
+
+/* =========================================================
+   FLOAT ANIMATION
+   ========================================================= */
+
+@keyframes serviceFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+
+/* =========================================================
+   PULSE ANIMATION
+   ========================================================= */
+
+@keyframes servicePulse {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: .60;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.12);
+        opacity: .25;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .service-detail-hero {
+        padding: 85px 25px 65px;
+    }
+    .service-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+    .service-detail-grid>div:first-child {
+        text-align: center;
+    }
+    .service-short-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .service-visual {
+        width: 100%;
+        max-width: 650px;
+        min-height: 350px;
+        margin: 0 auto;
+    }
+    .service-content-section,
+    .service-technologies {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+    .service-content-grid {
+        grid-template-columns: 1fr;
+    }
+    .service-info-card {
+        position: static;
+    }
+    .service-tech-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .service-detail {
+        width: 100%;
+        overflow-x: hidden;
+    }
+    /* HERO */
+    .service-detail-hero {
+        padding: 60px 18px 45px;
+    }
+    .service-detail-grid {
+        gap: 35px;
+    }
+    /* BADGE */
+    .service-detail-badge {
+        font-size: .68rem;
+        padding: 7px 12px;
+    }
+    /* TITLE */
+    .service-detail-title {
+        font-size: 2.6rem;
+        line-height: 1.06;
+        letter-spacing: -.04em;
+    }
+    /* SHORT DESCRIPTION */
+    .service-short-description {
+        margin-top: 20px;
+        font-size: .94rem;
+        line-height: 1.75;
+    }
+    /* VISUAL */
+    .service-visual {
+        min-height: 280px;
+        width: 100%;
+        border-radius: 23px;
+    }
+    /* DECORATIVE CIRCLE */
+    .service-visual::before {
+        width: 210px;
+        height: 210px;
+    }
+    .service-visual::after {
+        width: 150px;
+        height: 150px;
+    }
+    /* IMAGE BOX */
+    .service-detail-image {
+        width: 150px;
+        height: 150px;
+        margin: 0;
+        border-radius: 24px;
+    }
+    /* ACTUAL IMAGE */
+    .service-detail-image img {
+        width: 100px;
+        height: 100px;
+        max-width: 75%;
+        max-height: 75%;
+        padding: 0;
+        object-fit: contain;
+        object-position: center;
+    }
+    /* FALLBACK ICON */
+    .service-main-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 25px;
+        font-size: 2.6rem;
+    }
+    /* CONTENT */
+    .service-content-section {
+        padding: 60px 18px;
+    }
+    .service-description-card {
+        padding: 27px 20px;
+        border-radius: 19px;
+    }
+    .service-description-card h2 {
+        font-size: 1.9rem;
+    }
+    .service-description {
+        font-size: .92rem;
+        line-height: 1.8;
+    }
+    /* INFO */
+    .service-info-card {
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+    /* TECHNOLOGIES */
+    .service-technologies {
+        padding: 60px 18px;
+    }
+    .service-section-heading {
+        margin-bottom: 30px;
+    }
+    .service-section-heading h2 {
+        font-size: 2rem;
+    }
+    .service-section-heading p {
+        font-size: .9rem;
+    }
+    .service-tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .service-tech-card {
+        min-height: 125px;
+        padding: 18px 10px;
+        border-radius: 15px;
+    }
+    .service-tech-card img {
+        width: 46px;
+        height: 46px;
+        margin-bottom: 10px;
+    }
+    .service-tech-card h3 {
+        font-size: .84rem;
+    }
+    /* CTA */
+    .service-detail-cta {
+        padding: 55px 18px 75px;
+    }
+    .service-cta-box {
+        padding: 42px 20px;
+        border-radius: 20px;
+    }
+    .service-cta-box h2 {
+        font-size: 2rem;
+    }
+    .service-cta-box p {
+        font-size: .9rem;
+    }
+    /* BACK */
+    .service-back {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 35px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+    .service-detail-hero {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    .service-detail-title {
+        font-size: 2.2rem;
+    }
+    .service-visual {
+        min-height: 250px;
+    }
+    .service-detail-image {
+        width: 130px;
+        height: 130px;
+        border-radius: 21px;
+    }
+    .service-detail-image img {
+        width: 88px;
+        height: 88px;
+    }
+    .service-content-section,
+    .service-technologies,
+    .service-detail-cta {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    .service-tech-card {
+        min-height: 115px;
+        padding: 14px 7px;
+    }
+    .service-tech-card img {
+        width: 40px;
+        height: 40px;
+    }
+    .service-tech-card h3 {
+        font-size: .78rem;
+    }
+}

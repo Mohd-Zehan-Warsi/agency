@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %}
+
+<h1>Our Services</h1>
+
+{% for service in services %}
+<div>
+    <h2>{{ service.name }}</h2>
+    <p>{{ service.description }}</p>
+
+    <a href="{% url 'services:detail' service.slug %}">
+            View Details
+        </a>
+</div>
+{% empty %}
+<p>No services available.</p>
+{% endfor %} {% endblock %}

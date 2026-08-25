@@ -1,0 +1,1587 @@
+{% extends "developers/developer_base.html" %}
+
+{% block developer_extra_css %}
+<style>
+    :root {
+        --portfolio-bg: #05060b;
+        --portfolio-surface: #0b0d15;
+        --portfolio-surface-2: #10131e;
+        --portfolio-text: #f7f8fc;
+        --portfolio-muted: #98a0b2;
+        --portfolio-purple: #8b5cf6;
+        --portfolio-purple-2: #a855f7;
+        --portfolio-blue: #3b82f6;
+        --portfolio-cyan: #22d3ee;
+        --portfolio-border: rgba(255,255,255,.085);
+        --portfolio-container: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        background:
+            radial-gradient(circle at 8% 8%, rgba(124,58,237,.09), transparent 27%),
+            radial-gradient(circle at 92% 18%, rgba(34,211,238,.045), transparent 25%),
+            var(--portfolio-bg);
+    }
+
+    main { width: 100%; }
+
+    .portfolio-container {
+        width: min(var(--portfolio-container), calc(100% - 48px));
+        margin-inline: auto;
+    }
+
+    /* HERO */
+    .portfolio-hero {
+        position: relative;
+        padding: 55px 0 80px;
+        overflow: hidden;
+    }
+
+    .portfolio-hero::before {
+        content: "";
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        top: -280px;
+        right: -120px;
+        border-radius: 50%;
+        background: rgba(139,92,246,.10);
+        filter: blur(110px);
+        pointer-events: none;
+    }
+
+    .portfolio-hero-shell {
+        position: relative;
+        width: min(var(--portfolio-container), calc(100% - 48px));
+        min-height: 640px;
+        margin-inline: auto;
+        padding: 70px 78px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, .82fr);
+        align-items: center;
+        gap: 55px;
+        overflow: hidden;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 30px;
+        background:
+            radial-gradient(circle at 80% 35%, rgba(139,92,246,.075), transparent 35%),
+            linear-gradient(135deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+        box-shadow: 0 40px 110px rgba(0,0,0,.34);
+    }
+
+    .portfolio-hero-shell::after {
+        content: "";
+        position: absolute;
+        width: 430px;
+        height: 430px;
+        left: -250px;
+        bottom: -300px;
+        border-radius: 50%;
+        background: rgba(34,211,238,.045);
+        filter: blur(100px);
+        pointer-events: none;
+    }
+
+    .portfolio-hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 690px;
+    }
+
+    .portfolio-role {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 15px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(139,92,246,.25);
+        border-radius: 999px;
+        background: rgba(139,92,246,.055);
+        color: #cdd2dd;
+        font-size: 12px;
+        font-weight: 750;
+        letter-spacing: .25px;
+    }
+
+    .role-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 14px rgba(34,197,94,.8);
+    }
+
+    .portfolio-hero h1 {
+        margin: 0;
+        color: var(--portfolio-text);
+        font-size: clamp(52px, 6vw, 82px);
+        line-height: .98;
+        font-weight: 850;
+        letter-spacing: -4px;
+    }
+
+    .portfolio-hero h1 span {
+        display: block;
+        margin-top: 6px;
+        background: linear-gradient(100deg, #fff 0%, #c4b5fd 48%, #22d3ee 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .portfolio-intro {
+        max-width: 650px;
+        margin: 28px 0 26px;
+        color: var(--portfolio-muted);
+        font-size: 16px;
+        line-height: 1.85;
+    }
+
+    /* HERO META */
+    .portfolio-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px 25px;
+        margin-top: 28px;
+        padding-top: 21px;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .portfolio-meta div {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #7f8899;
+        font-size: 11px;
+        font-weight: 650;
+    }
+
+    .portfolio-meta i {
+        color: var(--portfolio-cyan);
+    }
+
+    /* HERO BUTTONS */
+    .portfolio-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .portfolio-btn {
+        min-height: 50px;
+        padding: 0 19px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        border-radius: 13px;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: .05px;
+        transition: .28s ease;
+    }
+
+    .portfolio-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    .portfolio-btn.primary {
+        color: #fff;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        border: 1px solid rgba(255,255,255,.08);
+        box-shadow: 0 14px 32px rgba(124,58,237,.28);
+    }
+
+    .portfolio-btn.primary:hover {
+        box-shadow: 0 20px 42px rgba(124,58,237,.40);
+    }
+
+    .portfolio-btn.secondary {
+        color: #e5e7ef;
+        border: 1px solid rgba(255,255,255,.13);
+        background: rgba(255,255,255,.035);
+        backdrop-filter: blur(12px);
+    }
+
+    .portfolio-btn.secondary:hover {
+        border-color: rgba(34,211,238,.42);
+        background: rgba(34,211,238,.05);
+    }
+
+    .cv-btn {
+        color: #e8e5ff;
+        border: 1px solid rgba(139,92,246,.48);
+        background: rgba(139,92,246,.055);
+    }
+
+    .cv-btn:hover {
+        border-color: rgba(168,85,247,.8);
+        background: rgba(139,92,246,.13);
+        box-shadow: 0 12px 30px rgba(124,58,237,.18);
+    }
+
+    .cv-btn.download {
+        color: #fff;
+        border-color: rgba(168,85,247,.7);
+        background: linear-gradient(135deg, rgba(124,58,237,.82), rgba(168,85,247,.72));
+        box-shadow: 0 12px 30px rgba(124,58,237,.20);
+    }
+
+    .cv-btn.download:hover {
+        box-shadow: 0 18px 40px rgba(124,58,237,.34);
+    }
+
+    /* HERO VISUAL */
+    .portfolio-hero-visual {
+        position: relative;
+        z-index: 2;
+        min-height: 510px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .visual-glow {
+        position: absolute;
+        width: 440px;
+        height: 440px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(139,92,246,.22), rgba(59,130,246,.08) 45%, transparent 70%);
+        filter: blur(8px);
+    }
+
+    .profile-frame {
+        position: relative;
+        z-index: 2;
+        width: 320px;
+        height: 420px;
+        padding: 5px;
+        border-radius: 165px 165px 26px 26px;
+        background: linear-gradient(145deg, #a855f7, #3b82f6 50%, #22d3ee);
+        box-shadow: 0 40px 90px rgba(0,0,0,.48);
+    }
+
+    .profile-frame img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        border: 5px solid #080a10;
+        border-radius: 160px 160px 21px 21px;
+    }
+
+    .profile-fallback {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border: 5px solid #080a10;
+        border-radius: 160px 160px 21px 21px;
+        background: linear-gradient(145deg, #171a28, #0b0d15);
+        font-size: 86px;
+        font-weight: 850;
+    }
+
+    .profile-badge {
+        position: absolute;
+        z-index: 4;
+        left: calc(50% - 185px);
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 12px 16px;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 14px;
+        background: rgba(8,10,16,.90);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 22px 55px rgba(0,0,0,.38);
+    }
+
+    .profile-badge > i {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        color: #d4c5ff;
+        background: rgba(139,92,246,.14);
+    }
+
+    .profile-badge div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-badge strong {
+        color: #f0f2f7;
+        font-size: 11px;
+    }
+
+    .profile-badge small {
+        margin-top: 2px;
+        color: #737d8f;
+        font-size: 9px;
+    }
+
+    /* STATS */
+    .portfolio-stats {
+        width: min(var(--portfolio-container), calc(100% - 48px));
+        margin: 0 auto;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 22px;
+        background: rgba(255,255,255,.025);
+        box-shadow: 0 25px 80px rgba(0,0,0,.20);
+    }
+
+    .stat-card {
+        min-height: 95px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 14px 22px;
+        border-right: 1px solid rgba(255,255,255,.07);
+    }
+
+    .stat-card:last-child { border-right: 0; }
+
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        display: grid;
+        place-items: center;
+        border-radius: 13px;
+        color: #d7caff;
+        background: rgba(139,92,246,.12);
+    }
+
+    .stat-card:nth-child(2) .stat-icon {
+        color: #9bdfff;
+        background: rgba(59,130,246,.12);
+    }
+
+    .stat-card:nth-child(3) .stat-icon {
+        color: #a9f5d2;
+        background: rgba(34,197,94,.10);
+    }
+
+    .stat-card:nth-child(4) .stat-icon {
+        color: #ff9cc5;
+        background: rgba(236,72,153,.10);
+    }
+
+    .stat-card strong {
+        display: block;
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    .stat-card span {
+        display: block;
+        margin-top: 6px;
+        color: #778093;
+        font-size: 10px;
+    }
+
+    /* SECTIONS */
+    .section {
+        width: min(var(--portfolio-container), calc(100% - 48px));
+        margin: 0 auto;
+        padding: 105px 0;
+    }
+
+    .section-title {
+        max-width: 720px;
+        margin: 0 auto 48px;
+        text-align: center;
+    }
+
+    .section-title > span,
+    .about-heading > span {
+        display: inline-block;
+        margin-bottom: 9px;
+        color: var(--portfolio-cyan);
+        font-size: 10px;
+        font-weight: 850;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .section-title h2 {
+        margin: 0;
+        color: var(--portfolio-text);
+        font-size: clamp(34px, 4vw, 50px);
+        line-height: 1.08;
+        letter-spacing: -2px;
+    }
+
+    .section-title p {
+        max-width: 620px;
+        margin: 14px auto 0;
+        color: var(--portfolio-muted);
+        font-size: 14px;
+    }
+
+    /* ABOUT */
+    .about-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1.12fr) minmax(340px, .88fr);
+        gap: 70px;
+        padding: 55px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 26px;
+        background:
+            radial-gradient(circle at 0% 0%, rgba(139,92,246,.07), transparent 35%),
+            rgba(255,255,255,.018);
+    }
+
+    .about-heading {
+        margin-bottom: 28px;
+    }
+
+    .about-heading h2 {
+        margin: 10px 0 0;
+        font-size: clamp(35px, 4vw, 53px);
+        line-height: 1.08;
+        letter-spacing: -2px;
+    }
+
+    .about-heading strong {
+        color: #a78bfa;
+    }
+
+    .about-copy {
+        color: var(--portfolio-muted);
+        font-size: 15px;
+        line-height: 1.9;
+    }
+
+    .about-copy.lead {
+        margin-bottom: 18px;
+        color: #e5e8ef;
+        font-size: 19px;
+        line-height: 1.7;
+    }
+
+    .about-contact {
+        margin-top: 28px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 14px;
+        background: rgba(255,255,255,.025);
+        transition: .25s ease;
+    }
+
+    .about-contact:hover {
+        transform: translateY(-2px);
+        border-color: rgba(139,92,246,.42);
+        background: rgba(139,92,246,.05);
+    }
+
+    .about-contact-icon {
+        width: 43px;
+        height: 43px;
+        flex: 0 0 43px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        color: #d1c1ff;
+        background: rgba(139,92,246,.13);
+    }
+
+    .about-contact-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-contact-copy small {
+        color: #747d8e;
+        font-size: 10px;
+    }
+
+    .about-contact-copy strong {
+        color: #e9ebf1;
+        font-size: 12px;
+        word-break: break-word;
+    }
+
+    .about-details {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+    }
+
+    .detail-card {
+        min-height: 78px;
+        padding: 15px 17px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 14px;
+        background: rgba(255,255,255,.025);
+        transition: .25s ease;
+    }
+
+    .detail-card:hover {
+        transform: translateX(4px);
+        border-color: rgba(34,211,238,.25);
+        background: rgba(34,211,238,.025);
+    }
+
+    .detail-icon {
+        width: 43px;
+        height: 43px;
+        flex: 0 0 43px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        color: var(--portfolio-cyan);
+        background: rgba(34,211,238,.07);
+    }
+
+    .detail-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .detail-copy small {
+        margin-bottom: 2px;
+        color: #70798b;
+        font-size: 10px;
+    }
+
+    .detail-copy strong {
+        color: #e8ebf2;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 15px;
+    }
+
+    .skill-card {
+        min-height: 115px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 16px;
+        background: rgba(255,255,255,.025);
+        transition: .3s ease;
+    }
+
+    .skill-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(139,92,246,.38);
+        background: rgba(139,92,246,.045);
+        box-shadow: 0 18px 45px rgba(0,0,0,.18);
+    }
+
+    .skill-icon {
+        width: 39px;
+        height: 39px;
+        margin-bottom: 12px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        color: #cbbaff;
+        background: rgba(139,92,246,.11);
+    }
+
+    .skill-card h3 {
+        color: #e9ecf3;
+        font-size: 14px;
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .project-card {
+        position: relative;
+        min-height: 310px;
+        padding: 27px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(255,255,255,.032), rgba(255,255,255,.015));
+        transition: .3s ease;
+    }
+
+    .project-card::before {
+        content: "";
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        top: -90px;
+        right: -60px;
+        border-radius: 50%;
+        background: rgba(139,92,246,.12);
+        filter: blur(10px);
+        transition: .3s ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-7px);
+        border-color: rgba(139,92,246,.4);
+        box-shadow: 0 25px 60px rgba(0,0,0,.22);
+    }
+
+    .project-card:hover::before {
+        transform: scale(1.25);
+    }
+
+    .project-number {
+        margin-bottom: 16px;
+        color: var(--portfolio-cyan);
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 1.5px;
+    }
+
+    .project-card h3 {
+        margin-bottom: 10px;
+        color: #eef0f6;
+        font-size: 21px;
+    }
+
+    .project-card p {
+        flex: 1;
+        color: var(--portfolio-muted);
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .project-tech {
+        margin-top: 17px;
+        color: #aaa2c7;
+        font-size: 11px;
+    }
+
+    .project-links {
+        margin-top: 21px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .project-links a {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 12px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 9px;
+        color: #cbd1dc;
+        background: rgba(255,255,255,.03);
+        font-size: 11px;
+        font-weight: 750;
+        transition: .2s ease;
+    }
+
+    .project-links a:hover {
+        color: #fff;
+        border-color: rgba(34,211,238,.30);
+        background: rgba(34,211,238,.06);
+    }
+
+    /* EXPERIENCE */
+    .timeline {
+        position: relative;
+        max-width: 900px;
+        margin-inline: auto;
+    }
+
+    .timeline::before {
+        content: "";
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(var(--portfolio-cyan), var(--portfolio-purple));
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-left: 45px;
+        margin-bottom: 25px;
+    }
+
+    .timeline-dot {
+        position: absolute;
+        left: 3px;
+        top: 7px;
+        width: 15px;
+        height: 15px;
+        border: 3px solid var(--portfolio-bg);
+        border-radius: 50%;
+        background: var(--portfolio-cyan);
+        box-shadow: 0 0 18px rgba(34,211,238,.65);
+    }
+
+    .timeline-card {
+        padding: 25px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 17px;
+        background: rgba(255,255,255,.025);
+        transition: .25s ease;
+    }
+
+    .timeline-card:hover {
+        border-color: rgba(34,211,238,.25);
+        transform: translateX(3px);
+    }
+
+    .timeline-card h3 {
+        color: #eef0f6;
+        font-size: 20px;
+    }
+
+    .timeline-card h4 {
+        margin-top: 4px;
+        color: var(--portfolio-cyan);
+        font-size: 13px;
+    }
+
+    .timeline-date {
+        margin-top: 7px;
+        color: #6f7889;
+        font-size: 11px;
+    }
+
+    .timeline-card p {
+        margin-top: 13px;
+        color: var(--portfolio-muted);
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    /* EDUCATION */
+    .education-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .education-card {
+        padding: 27px;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 17px;
+        background: rgba(255,255,255,.025);
+        transition: .25s ease;
+    }
+
+    .education-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(139,92,246,.35);
+    }
+
+    .education-icon {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 18px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        color: #c9b8ff;
+        background: rgba(139,92,246,.12);
+    }
+
+    .education-card h3 {
+        margin-bottom: 7px;
+        color: #eef0f6;
+        font-size: 19px;
+    }
+
+    .education-field {
+        margin-bottom: 13px;
+        color: var(--portfolio-cyan);
+        font-size: 13px;
+    }
+
+    .education-card strong {
+        display: block;
+        margin-bottom: 7px;
+        color: #dfe3ec;
+        font-size: 13px;
+    }
+
+    .education-year {
+        color: var(--portfolio-muted);
+        font-size: 12px;
+    }
+
+    /* CONTACT */
+    .contact-card {
+        position: relative;
+        overflow: hidden;
+        padding: 75px 35px;
+        text-align: center;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 27px;
+        background:
+            radial-gradient(circle at 50% 0%, rgba(139,92,246,.14), transparent 48%),
+            rgba(255,255,255,.025);
+    }
+
+    .contact-card::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        left: -130px;
+        bottom: -180px;
+        border-radius: 50%;
+        background: rgba(34,211,238,.06);
+        filter: blur(60px);
+    }
+
+    .contact-card h2 {
+        position: relative;
+        margin-bottom: 12px;
+        color: #f3f5fa;
+        font-size: clamp(34px, 5vw, 52px);
+        letter-spacing: -2px;
+    }
+
+    .contact-card p {
+        position: relative;
+        max-width: 620px;
+        margin: 0 auto 25px;
+        color: var(--portfolio-muted);
+        font-size: 14px;
+    }
+
+    .contact-email {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 22px;
+        color: var(--portfolio-cyan);
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .contact-actions {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .contact-btn {
+        min-height: 47px;
+        padding: 0 17px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 12px;
+        border: 1px solid var(--portfolio-border);
+        background: rgba(255,255,255,.035);
+        color: #e2e5ed;
+        font-size: 12px;
+        font-weight: 800;
+        transition: .25s ease;
+    }
+
+    .contact-btn:hover {
+        transform: translateY(-2px);
+        border-color: rgba(139,92,246,.45);
+        background: rgba(139,92,246,.09);
+    }
+
+    .contact-btn.primary {
+        color: #fff;
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--portfolio-purple), var(--portfolio-purple-2));
+    }
+
+    .empty {
+        width: 100%;
+        padding: 30px;
+        text-align: center;
+        color: var(--portfolio-muted);
+        border: 1px dashed var(--portfolio-border);
+        border-radius: 15px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1100px) {
+        .portfolio-hero-shell {
+            grid-template-columns: 1fr;
+            min-height: auto;
+            text-align: center;
+            padding: 65px 50px;
+        }
+
+        .portfolio-hero-content {
+            max-width: 760px;
+            margin-inline: auto;
+        }
+
+        .portfolio-intro { margin-inline: auto; }
+
+        .portfolio-actions,
+        .portfolio-meta { justify-content: center; }
+
+        .portfolio-hero-visual {
+            order: -1;
+            min-height: 450px;
+        }
+
+        .about-panel {
+            grid-template-columns: 1fr;
+            gap: 45px;
+        }
+
+        .projects-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 850px) {
+        .portfolio-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-card:nth-child(2) {
+            border-right: 0;
+        }
+
+        .stat-card:nth-child(-n+2) {
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+    }
+
+    @media (max-width: 650px) {
+        .portfolio-container,
+        .portfolio-hero-shell,
+        .portfolio-stats,
+        .section {
+            width: calc(100% - 30px);
+        }
+
+        .portfolio-hero {
+            padding: 25px 0 55px;
+        }
+
+        .portfolio-hero-shell {
+            padding: 45px 22px;
+            border-radius: 22px;
+            gap: 38px;
+        }
+
+        .portfolio-hero h1 {
+            font-size: 47px;
+            letter-spacing: -2.8px;
+        }
+
+        .portfolio-intro {
+            font-size: 14px;
+        }
+
+        .portfolio-hero-visual {
+            min-height: 330px;
+        }
+
+        .visual-glow {
+            width: 290px;
+            height: 290px;
+        }
+
+        .profile-frame {
+            width: 235px;
+            height: 310px;
+        }
+
+        .profile-badge {
+            left: 50%;
+            bottom: -5px;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .portfolio-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .portfolio-btn {
+            width: 100%;
+            padding-inline: 10px;
+        }
+
+        .portfolio-stats {
+            padding: 12px;
+            gap: 0;
+        }
+
+        .stat-card {
+            padding: 14px 10px;
+            min-height: 82px;
+            gap: 10px;
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            flex-basis: 38px;
+        }
+
+        .stat-card strong { font-size: 17px; }
+        .stat-card span { font-size: 9px; }
+
+        .section {
+            padding: 75px 0;
+        }
+
+        .about-panel {
+            padding: 28px 22px;
+            border-radius: 20px;
+        }
+
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .skills-grid {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+        }
+
+        .contact-card {
+            padding: 55px 20px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .portfolio-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .portfolio-hero h1 {
+            font-size: 40px;
+        }
+
+        .profile-frame {
+            width: 215px;
+            height: 285px;
+        }
+
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock developer_extra_css %}
+
+{% block content %}
+<main>
+
+    <!-- HERO -->
+    <section id="home" class="portfolio-hero">
+
+        <div class="portfolio-hero-shell">
+
+            <div class="portfolio-hero-content">
+
+                <div class="portfolio-role">
+                    <span class="role-dot"></span>
+                    {{ developer.designation }}
+                </div>
+
+                <h1>
+                    Hi, I'm
+                    <span>{{ developer.name }}</span>
+                </h1>
+
+                {% if developer.bio %}
+                    <p class="portfolio-intro">
+                        {{ developer.bio }}
+                    </p>
+                {% endif %}
+
+                <div class="portfolio-actions">
+
+                    <a href="#projects" class="portfolio-btn primary">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                        View My Work
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+
+                    {% if developer.email %}
+                        <a href="mailto:{{ developer.email }}" class="portfolio-btn secondary">
+                            <i class="far fa-paper-plane"></i>
+                            Let's Talk
+                            <i class="fas fa-arrow-up-right-from-square"></i>
+                        </a>
+                    {% endif %}
+
+                    {% if developer.cv %}
+                        <a href="{{ developer.cv.url }}"
+                           target="_blank"
+                           rel="noopener"
+                           class="portfolio-btn cv-btn">
+                            <i class="far fa-eye"></i>
+                            View CV
+                        </a>
+
+                        <a href="{{ developer.cv.url }}"
+                           download
+                           class="portfolio-btn cv-btn download">
+                            <i class="fas fa-download"></i>
+                            Download CV
+                        </a>
+                    {% endif %}
+
+                </div>
+
+                <div class="portfolio-meta">
+
+                    {% if developer.location %}
+                        <div>
+                            <i class="fas fa-location-dot"></i>
+                            {{ developer.location }}
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <i class="fas fa-code"></i>
+                        {{ developer.skills.count }} Skills
+                    </div>
+
+                    <div>
+                        <i class="fas fa-folder-open"></i>
+                        {{ developer.projects.count }} Projects
+                    </div>
+
+                    {% if developer.cv %}
+                        <div>
+                            <i class="fas fa-file-pdf"></i>
+                            CV Available
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <div class="portfolio-hero-visual">
+
+                <div class="visual-glow"></div>
+
+                <div class="profile-frame">
+                    {% if developer.photo %}
+                        <img src="{{ developer.photo.url }}" alt="{{ developer.name }}">
+                    {% else %}
+                        <div class="profile-fallback">
+                            {{ developer.name|first|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="profile-badge">
+                    <i class="fas fa-code"></i>
+                    <div>
+                        <strong>{{ developer.designation }}</strong>
+                        <small>Building digital experiences</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="portfolio-container" aria-label="Developer statistics">
+        <div class="portfolio-stats">
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-rocket"></i></div>
+                <div>
+                    <strong>{{ developer.projects.count }}+</strong>
+                    <span>Projects Built</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                <div>
+                    <strong>{{ developer.experiences.count }}+</strong>
+                    <span>Experience Records</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-code"></i></div>
+                <div>
+                    <strong>{{ developer.skills.count }}+</strong>
+                    <span>Technologies</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div>
+                    <strong>{{ developer.education.count }}+</strong>
+                    <span>Education Records</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+
+        <div class="about-panel">
+
+            <div>
+                <div class="about-heading">
+                    <span>About Me</span>
+                    <h2>
+                        Turning ideas into
+                        <strong>digital experiences.</strong>
+                    </h2>
+                </div>
+
+                <p class="about-copy lead">
+                    I'm {{ developer.name }}, a {{ developer.designation }}
+                    focused on building modern and meaningful digital experiences.
+                </p>
+
+                {% if developer.bio %}
+                    <p class="about-copy">
+                        {{ developer.bio }}
+                    </p>
+                {% endif %}
+
+                {% if developer.email %}
+                    <a href="mailto:{{ developer.email }}" class="about-contact">
+                        <span class="about-contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+
+                        <span class="about-contact-copy">
+                            <small>Have a project in mind?</small>
+                            <strong>{{ developer.email }}</strong>
+                        </span>
+
+                        <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="about-details">
+
+                {% if developer.location %}
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-location-dot"></i>
+                        </div>
+                        <div class="detail-copy">
+                            <small>Location</small>
+                            <strong>{{ developer.location }}</strong>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="detail-copy">
+                        <small>Specialization</small>
+                        <strong>{{ developer.designation }}</strong>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-diagram-project"></i>
+                    </div>
+                    <div class="detail-copy">
+                        <small>Projects</small>
+                        <strong>{{ developer.projects.count }} Completed / Built</strong>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="detail-copy">
+                        <small>Technical Skills</small>
+                        <strong>{{ developer.skills.count }} Technologies</strong>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section">
+
+        <div class="section-title">
+            <span>My Expertise</span>
+            <h2>Skills</h2>
+            <p>Technologies and tools I work with.</p>
+        </div>
+
+        <div class="skills-grid">
+            {% for skill in developer.skills.all %}
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>{{ skill.name }}</h3>
+                </div>
+            {% empty %}
+                <p class="empty">No skills added yet.</p>
+            {% endfor %}
+        </div>
+
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+
+        <div class="section-title">
+            <span>Portfolio</span>
+            <h2>Featured Projects</h2>
+            <p>Some of my recent work and projects.</p>
+        </div>
+
+        <div class="projects-grid">
+            {% for project in developer.projects.all %}
+
+                <article class="project-card">
+
+                    <div class="project-number">
+                        PROJECT {{ forloop.counter|stringformat:"02d" }}
+                    </div>
+
+                    <h3>{{ project.title }}</h3>
+
+                    <p>
+                        {{ project.description }}
+                    </p>
+
+                    {% if project.technologies %}
+                        <div class="project-tech">
+                            <i class="fas fa-layer-group"></i>
+                            {{ project.technologies }}
+                        </div>
+                    {% endif %}
+
+                    <div class="project-links">
+
+                        {% if project.project_url %}
+                            <a href="{{ project.project_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <i class="fas fa-arrow-up-right-from-square"></i>
+                                Live Project
+                            </a>
+                        {% endif %}
+
+                        {% if project.github_url %}
+                            <a href="{{ project.github_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <i class="fab fa-github"></i>
+                                GitHub
+                            </a>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+                <p class="empty">No projects added yet.</p>
+            {% endfor %}
+        </div>
+
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section">
+
+        <div class="section-title">
+            <span>Career</span>
+            <h2>Experience</h2>
+            <p>Professional journey and work experience.</p>
+        </div>
+
+        <div class="timeline">
+
+            {% for experience in developer.experiences.all %}
+
+                <article class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <div class="timeline-card">
+
+                        <h3>{{ experience.position }}</h3>
+
+                        <h4>{{ experience.company }}</h4>
+
+                        <div class="timeline-date">
+                            {{ experience.start_date|date:"M Y" }}
+                            —
+                            {% if experience.end_date %}
+                                {{ experience.end_date|date:"M Y" }}
+                            {% else %}
+                                Present
+                            {% endif %}
+                        </div>
+
+                        {% if experience.description %}
+                            <p>{{ experience.description }}</p>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+                <p class="empty">No experience added yet.</p>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="section">
+
+        <div class="section-title">
+            <span>Education</span>
+            <h2>My Education</h2>
+            <p>Academic background and qualifications.</p>
+        </div>
+
+        <div class="education-grid">
+
+            {% for education in developer.education.all %}
+
+                <article class="education-card">
+
+                    <div class="education-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+
+                    <h3>{{ education.degree }}</h3>
+
+                    {% if education.field %}
+                        <div class="education-field">
+                            {{ education.field }}
+                        </div>
+                    {% endif %}
+
+                    <strong>{{ education.institute }}</strong>
+
+                    <div class="education-year">
+                        {{ education.start_year }}
+                        —
+                        {% if education.end_year %}
+                            {{ education.end_year }}
+                        {% else %}
+                            Present
+                        {% endif %}
+                    </div>
+
+                </article>
+
+            {% empty %}
+                <p class="empty">No education details added yet.</p>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+
+        <div class="contact-card">
+
+            <h2>Let's Work Together</h2>
+
+            <p>
+                Have a project in mind or looking for a developer?
+                Feel free to get in touch.
+            </p>
+
+            {% if developer.email %}
+                <a href="mailto:{{ developer.email }}" class="contact-email">
+                    {{ developer.email }}
+                </a>
+            {% endif %}
+
+            <div class="contact-actions">
+
+                {% if developer.email %}
+                    <a href="mailto:{{ developer.email }}" class="contact-btn primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Me an Email
+                    </a>
+                {% endif %}
+
+                {% if developer.phone %}
+                    <a href="tel:{{ developer.phone }}" class="contact-btn">
+                        <i class="fas fa-phone"></i>
+                        Call
+                    </a>
+                {% endif %}
+
+                {% if developer.cv %}
+                    <a href="{{ developer.cv.url }}"
+                       target="_blank"
+                       rel="noopener"
+                       class="contact-btn">
+                        <i class="far fa-eye"></i>
+                        View CV
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+{% endblock content %}

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ agency.name|default:'DevAgency' }}</title>
+    <style>
+         :root {
+            --bg: #07080d;
+            --card: #11131c;
+            --text: #fff;
+            --muted: #9da3b4;
+            --p: #7c3aed;
+            --cyan: #00d4ff
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+        
+        html {
+            scroll-behavior: smooth
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+        
+        .container {
+            width: min(1180px, calc(100% - 32px));
+            margin: auto
+        }
+        
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #07080ddd;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid #ffffff12
+        }
+        
+        .nav-inner {
+            min-height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+        
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+        
+        .mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--p), var(--cyan))
+        }
+        
+        .links {
+            display: flex;
+            gap: 25px;
+            list-style: none
+        }
+        
+        .links a {
+            color: #cfd2dc;
+            font-size: .9rem
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 11px;
+            font-weight: 700;
+            border: 1px solid #ffffff18
+        }
+        
+        .primary {
+            background: linear-gradient(135deg, var(--p), #9b5cff);
+            border: 0
+        }
+        
+        .menu {
+            display: none;
+            background: var(--card);
+            color: #fff;
+            border: 1px solid #ffffff18;
+            padding: 9px 12px;
+            border-radius: 9px
+        }
+        
+        .hero {
+            padding: 100px 0 70px
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center
+        }
+        
+        .badge {
+            display: inline-block;
+            color: #cdb5ff;
+            background: #7c3aed12;
+            border: 1px solid #7c3aed55;
+            border-radius: 99px;
+            padding: 7px 12px;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 20px
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 1.02;
+            letter-spacing: -.05em
+        }
+        
+        .gradient {
+            background: linear-gradient(90deg, #fff, #9b5cff, #00d4ff);
+            color: transparent;
+            background-clip: text
+        }
+        
+        .hero p {
+            color: var(--muted);
+            max-width: 620px;
+            margin: 22px 0 28px
+        }
+        
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+        
+        .visual {
+            min-height: 400px;
+            border: 1px solid #ffffff12;
+            border-radius: 28px;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle, #7c3aed55, transparent 42%), #10121a
+        }
+        
+        .orb {
+            width: 210px;
+            height: 210px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 25%, #d2baff, #7c3aed 45%, #160b2d 75%);
+            box-shadow: 0 0 90px #7c3aed88
+        }
+        
+        section {
+            padding: 85px 0
+        }
+        
+        .stats,
+        .cards,
+        .projects,
+        .team {
+            display: grid;
+            gap: 18px
+        }
+        
+        .stats {
+            grid-template-columns: repeat(4, 1fr);
+            background: #ffffff05;
+            border: 1px solid #ffffff12;
+            border-radius: 18px;
+            overflow: hidden
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 25px;
+            border-right: 1px solid #ffffff12
+        }
+        
+        .stat:last-child {
+            border: 0
+        }
+        
+        .stat strong {
+            display: block;
+            font-size: 2rem
+        }
+        
+        .stat span,
+        p {
+            color: var(--muted)
+        }
+        
+        .heading {
+            max-width: 700px;
+            margin-bottom: 35px
+        }
+        
+        .heading h2 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1.1;
+            margin: 10px 0
+        }
+        
+        .cards,
+        .projects {
+            grid-template-columns: repeat(3, 1fr)
+        }
+        
+        .card {
+            background: linear-gradient(145deg, #ffffff08, #ffffff02);
+            border: 1px solid #ffffff10;
+            border-radius: 18px;
+            padding: 26px;
+            transition: .25s
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #7c3aed88
+        }
+        
+        .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            background: #7c3aed22;
+            margin-bottom: 18px
+        }
+        
+        .project-img {
+            aspect-ratio: 16/10;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #7c3aedaa, #00d4ff33);
+            display: grid;
+            place-items: center;
+            font-size: 2rem;
+            margin-bottom: 17px
+        }
+        
+        .team {
+            grid-template-columns: repeat(2, 1fr);
+            max-width: 850px
+        }
+        
+        .person {
+            display: flex;
+            gap: 18px;
+            align-items: center
+        }
+        
+        .avatar {
+            width: 75px;
+            height: 75px;
+            flex: none;
+            border-radius: 18px;
+            background: #202334;
+            display: grid;
+            place-items: center;
+            font-size: 1.5rem;
+            font-weight: 800
+        }
+        
+        .landing,
+        .cta {
+            border: 1px solid #7c3aed66;
+            border-radius: 25px;
+            padding: 55px;
+            background: radial-gradient(circle at 80%, #00d4ff18, transparent 30%), linear-gradient(135deg, #7c3aed30, #ffffff03)
+        }
+        
+        .landing h2,
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1.1;
+            margin: 10px 0 15px
+        }
+        
+        .landing p {
+            max-width: 700px;
+            margin-bottom: 25px
+        }
+        
+        .cta {
+            text-align: center
+        }
+        
+        .cta p {
+            margin: 12px 0 25px
+        }
+        
+        footer {
+            border-top: 1px solid #ffffff12;
+            padding: 55px 0 25px
+        }
+        
+        .foot {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 35px
+        }
+        
+        .foot ul {
+            list-style: none;
+            display: grid;
+            gap: 8px
+        }
+        
+        .foot a,
+        .foot p {
+            color: var(--muted);
+            font-size: .9rem
+        }
+        
+        .copy {
+            text-align: center;
+            border-top: 1px solid #ffffff12;
+            margin-top: 40px;
+            padding-top: 20px;
+            color: var(--muted);
+            font-size: .8rem
+        }
+        
+        @media(max-width:991px) {
+            .links,
+            .nav-cta {
+                display: none
+            }
+            .menu {
+                display: block
+            }
+            .hero-grid {
+                grid-template-columns: 1fr
+            }
+            .cards,
+            .projects {
+                grid-template-columns: repeat(2, 1fr)
+            }
+            .foot {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+        /* MOBILE MENU */
+        
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 74px;
+            left: 11px;
+            right: 11px;
+            padding: 12px;
+            background: rgba(12, 14, 22, .98);
+            border: 1px solid #ffffff18;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+        }
+        
+        .mobile-menu.open {
+            display: block
+        }
+        
+        .mobile-menu a {
+            display: block;
+            padding: 13px 14px;
+            border-radius: 10px;
+            color: #dfe2eb;
+        }
+        
+        .mobile-menu a:hover {
+            background: #ffffff08;
+            color: #fff
+        }
+        
+        .mobile-menu .mobile-cta {
+            margin-top: 6px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--p), #9b5cff);
+            color: #fff;
+            font-weight: 700;
+        }
+        
+        @media(max-width:767px) {
+            .container {
+                width: calc(100% - 22px)
+            }
+            .hero {
+                padding: 60px 0 30px
+            }
+            .hero-grid {
+                gap: 35px
+            }
+            .visual {
+                min-height: 280px
+            }
+            .orb {
+                width: 150px;
+                height: 150px
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr)
+            }
+            .stat {
+                border-bottom: 1px solid #ffffff12
+            }
+            .cards,
+            .projects,
+            .team {
+                grid-template-columns: 1fr
+            }
+            .team {
+                max-width: none
+            }
+            .actions {
+                flex-direction: column
+            }
+            .btn {
+                width: 100%
+            }
+            .landing,
+            .cta {
+                padding: 32px 22px
+            }
+            .foot {
+                grid-template-columns: 1fr
+            }
+            section {
+                padding: 65px 0
+            }
+        }
+        /* Tablet + Mobile */
+        
+        @media (max-width: 991px) {
+            .links,
+            .nav-cta {
+                display: none;
+            }
+            .menu {
+                display: block;
+            }
+        }
+        /* Laptop + Desktop */
+        
+        @media (min-width: 992px) {
+            .links,
+            .nav-cta {
+                display: flex;
+            }
+            .menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="nav">
+        <div class="container nav-inner">
+            <a class="logo" href="{% url 'home' %}"><span class="mark">{{ agency.logo_mark|default:"A" }}</span>{{ agency.name|default:"DevAgency" }}</a>
+            <ul class="links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#landing">Technologies</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a class="btn primary nav-cta" href="#contact">Get a Quote →</a>
+            <button class="menu" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#projects">Projects</a>
+                <a href="#team">Team</a>
+                <a href="#landing">Technologies</a>
+                <a href="#contact">Contact</a>
+                <a class="mobile-cta" href="#contact">Get a Quote →</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="container hero-grid">
+                <div><span class="badge">We build digital experiences</span>
+                    <h1>We Design. We Develop. <span class="gradient">We Grow Your Business.</span></h1>
+                    <p>We are a creative digital agency and developer team building modern websites, web apps and high-converting landing pages.</p>
+                    <div class="actions"><a class="btn primary" href="#services">Explore Services →</a><a class="btn" href="#projects">View Projects</a></div>
+                </div>
+                <div class="visual">
+                    <div class="orb"></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="stats">
+                    <div class="stat"><strong>10+</strong><span>Projects</span></div>
+                    <div class="stat"><strong>6+</strong><span>Services</span></div>
+                    <div class="stat"><strong>2</strong><span>Developers</span></div>
+                    <div class="stat"><strong>100%</strong><span>Commitment</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="container">
+
+                <div class="heading">
+                    <span class="badge">What we do</span>
+                    <h2>Our Services</h2>
+                    <p>Digital solutions designed around your business goals.</p>
+                </div>
+
+                <div class="cards">
+
+                    {% for service in services %}
+
+                    <article class="card">
+
+                        <div class="icon">
+                            {{ service.icon_text|default:"✦" }}
+                        </div>
+
+                        <h3>{{ service.title }}</h3>
+
+                        {% if service.description %}
+                        <p>{{ service.description }}</p>
+                        {% endif %} {% if service.technologies.exists %}
+                        <p class="service-tech">
+                            {% for technology in service.technologies.all %} {{ technology.name }} {% if not forloop.last %} · {% endif %} {% endfor %}
+                        </p>
+                        {% endif %}
+
+                    </article>
+
+                    {% empty %}
+                    <p>No services available.</p>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <div class="heading"><span class="badge">Our work</span>
+                    <h2>Featured Projects</h2>
+                    <p>Selected work from our agency portfolio.</p>
+                </div>
+                <div class="projects">
+                    {% for project in projects %}
+                    <article class="card">
+                        <a href="{% if project.project_url %}{{ project.project_url }}{% else %}#{% endif %}" {% if project.project_url %}target="_blank" rel="noopener" {% endif %}>
+                            <div class="project-img">
+                                {% if project.image %}
+                                <img src="{{ project.image.url }}" alt="{{ project.title }}" style="width:100%;height:100%;object-fit:cover;border-radius:13px;"> {% else %} {{ forloop.counter|stringformat:"02d" }} {% endif %}
+                            </div>
+                            <h3>{{ project.title }}</h3>
+                            {% if project.description %}
+                            <p>{{ project.description|truncatewords:18 }}</p>
+                            {% endif %} {% if project.technologies.all %}
+                            <p>
+                                {% for tech in project.technologies.all %} {{ tech.name }}{% if not forloop.last %} · {% endif %} {% endfor %}
+                            </p>
+                            {% endif %}
+                        </a>
+                    </article>
+                    {% empty %}
+                    <p>No projects available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section id="team">
+            <div class="container">
+                <div class="heading"><span class="badge">Our experts</span>
+                    <h2>Meet Our Developers</h2>
+                    <p>Individual portfolios will be integrated into these profiles.</p>
+                </div>
+                <div class="team">
+                    {% for developer in developers %}
+                    <article class="card person">
+                        <div class="avatar">
+                            {% if developer.photo %}
+                            <img src="{{ developer.photo.url }}" alt="{{ developer.name }}" style="width:75px;height:75px;object-fit:cover;border-radius:18px;"> {% else %} {{ developer.name|first|upper }} {% endif %}
+                        </div>
+                        <div>
+                            <h3>{{ developer.name }}</h3>
+                            <p>{{ developer.designation }}</p>
+                            {% if developer.bio %}
+                            <p>{{ developer.bio|truncatewords:12 }}</p>{% endif %}
+                        </div>
+                    </article>
+                    {% empty %}
+                    <p>No developers available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section id="landing">
+            <div class="container">
+                <div class="landing"><span class="badge">Our specialty</span>
+                    <h2>Build once. Create unlimited landing pages.</h2>
+                    <p>Our Django-based landing page system will let the agency create reusable, responsive campaign pages without rebuilding every page from scratch.</p><a class="btn primary" href="#contact">Explore Landing Pages →</a></div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <div class="cta">
+                    <h2>Ready to Grow Your Business?</h2>
+                    <p>Let's build something useful, modern and memorable.</p><a class="btn primary" href="mailto:hello@example.com">Start a Project →</a></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="foot">
+                <div>
+                    <div class="logo"><span class="mark">{{ agency.logo_mark|default:"A" }}</span>{{ agency.name|default:"DevAgency" }}</div>
+                    <p style="margin-top:12px">{{ agency.description|default:'Digital agency and developer team building modern digital experiences.' }}</p>
+                </div>
+                <div><b>Quick Links</b>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                    </ul>
+                </div>
+                <div><b>Services</b>
+                    <ul>
+                        <li><a href="#services">Web Development</a></li>
+                        <li><a href="#services">SEO</a></li>
+                        <li><a href="#landing">Landing Pages</a></li>
+                    </ul>
+                </div>
+                <div><b>Contact</b>
+                    <ul>
+                        <li><a href="mailto:hello@example.com">Email</a></li>
+                        <li><a href="#contact">Get a Quote</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copy">© {% now 'Y' %} {{ agency.name|default:'DevAgency' }}. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', isOpen);
+            menuBtn.textContent = isOpen ? '✕' : '☰';
+        });
+
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.textContent = '☰';
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 991) {
+                mobileMenu.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.textContent = '☰';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

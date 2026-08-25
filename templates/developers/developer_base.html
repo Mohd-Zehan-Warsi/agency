@@ -1,0 +1,555 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <title>{{ developer.name }} | {{ developer.designation }}</title>
+
+    <style>
+         :root {
+            --bg: #05060b;
+            --surface: #0b0d15;
+            --surface-2: #10131e;
+            --text: #f7f8fc;
+            --muted: #98a0b2;
+            --purple: #8b5cf6;
+            --purple-2: #a855f7;
+            --cyan: #22d3ee;
+            --blue: #3b82f6;
+            --border: rgba(255, 255, 255, .09);
+            --container: 1240px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+        
+        body {
+            background: radial-gradient(circle at 10% 0%, rgba(124, 58, 237, .08), transparent 28%), radial-gradient(circle at 90% 10%, rgba(34, 211, 238, .045), transparent 25%), var(--bg);
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .container {
+            width: min(var(--container), calc(100% - 48px));
+            margin-inline: auto;
+        }
+        /* NAVBAR */
+        
+        .developer-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 6, 11, .78);
+            border-bottom: 1px solid rgba(255, 255, 255, .07);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .developer-nav-inner {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        
+        .developer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.08rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        
+        .developer-logo-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--purple), var(--blue), var(--cyan));
+            box-shadow: 0 8px 25px rgba(124, 58, 237, .25);
+        }
+        
+        .developer-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 26px;
+            list-style: none;
+        }
+        
+        .developer-links a {
+            position: relative;
+            color: #b9bfcc;
+            font-size: .88rem;
+            transition: .25s ease;
+        }
+        
+        .developer-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 100%;
+            bottom: -8px;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            transition: .25s ease;
+        }
+        
+        .developer-links a:hover {
+            color: #fff;
+        }
+        
+        .developer-links a:hover::after {
+            right: 0;
+        }
+        
+        .developer-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        
+        .developer-cv-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1px solid rgba(168, 85, 247, .5);
+            border-radius: 12px;
+            background: rgba(139, 92, 246, .08);
+            color: #eeeaff;
+            font-size: .82rem;
+            font-weight: 800;
+            transition: .25s ease;
+        }
+        
+        .developer-cv-nav:hover {
+            transform: translateY(-2px);
+            border-color: rgba(34, 211, 238, .65);
+            background: rgba(139, 92, 246, .16);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, .18);
+        }
+        
+        .developer-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 42px;
+            padding: 0 17px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--purple), var(--purple-2));
+            font-size: .82rem;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, .18);
+            transition: .25s ease;
+        }
+        
+        .developer-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(124, 58, 237, .28);
+        }
+        
+        .developer-menu-btn {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface);
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .developer-mobile-menu {
+            display: none;
+            position: absolute;
+            top: 82px;
+            left: 16px;
+            right: 16px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: rgba(10, 12, 20, .97);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .55);
+            backdrop-filter: blur(20px);
+        }
+        
+        .developer-mobile-menu.open {
+            display: block;
+        }
+        
+        .developer-mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 14px;
+            border-radius: 11px;
+            color: #cfd4df;
+            font-size: .9rem;
+        }
+        
+        .developer-mobile-menu a:hover {
+            background: rgba(255, 255, 255, .05);
+            color: #fff;
+        }
+        
+        .developer-mobile-menu .mobile-cv {
+            margin-top: 6px;
+            border: 1px solid rgba(168, 85, 247, .35);
+            background: rgba(139, 92, 246, .08);
+        }
+        
+        .developer-mobile-menu .mobile-contact {
+            margin-top: 6px;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--purple), var(--purple-2));
+            color: #fff;
+            font-weight: 800;
+        }
+        /* FOOTER */
+        
+        .developer-footer {
+            margin-top: 45px;
+            padding: 75px 0 28px;
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            background: radial-gradient(circle at 15% 0%, rgba(139, 92, 246, .06), transparent 30%), #06070d;
+        }
+        
+        .developer-footer-grid {
+            display: grid;
+            grid-template-columns: 1.7fr 1fr 1fr;
+            gap: 55px;
+        }
+        
+        .developer-footer h3 {
+            margin-bottom: 17px;
+            font-size: .95rem;
+        }
+        
+        .developer-footer p {
+            max-width: 470px;
+            margin-top: 15px;
+            color: var(--muted);
+            font-size: .9rem;
+            line-height: 1.8;
+        }
+        
+        .developer-footer-links {
+            display: grid;
+            gap: 9px;
+            list-style: none;
+        }
+        
+        .developer-footer-links a,
+        .developer-footer-links li {
+            color: var(--muted);
+            font-size: .86rem;
+            transition: .2s ease;
+        }
+        
+        .developer-footer-links a:hover {
+            color: #fff;
+        }
+        
+        .developer-socials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 22px;
+        }
+        
+        .developer-socials a {
+            width: 41px;
+            height: 41px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .025);
+            color: #cbd1dd;
+            transition: .25s ease;
+        }
+        
+        .developer-socials a:hover {
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: rgba(139, 92, 246, .55);
+            background: rgba(139, 92, 246, .12);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, .12);
+        }
+        
+        .developer-copyright {
+            margin-top: 50px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            text-align: center;
+            color: #697183;
+            font-size: .78rem;
+        }
+        
+        @media (max-width: 1080px) {
+            .developer-links {
+                gap: 17px;
+            }
+            .developer-nav-actions .developer-nav-btn {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 850px) {
+            .developer-links,
+            .developer-nav-actions {
+                display: none;
+            }
+            .developer-menu-btn {
+                display: grid;
+                place-items: center;
+            }
+            /*hhhh*/
+            @media (max-width: 650px) {
+                .container {
+                    width: min(var(--container), calc(100% - 30px));
+                }
+                .developer-nav-inner {
+                    min-height: 70px;
+                }
+                .developer-footer {
+                    padding-top: 55px;
+                }
+                .developer-footer-grid {
+                    grid-template-columns: 1fr;
+                    gap: 35px;
+                    text-align: center;
+                }
+                .developer-socials {
+                    justify-content: center;
+                }
+                .developer-footer p {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
+        }
+        
+        @media (max-width: 650px) {
+            .container {
+                width: min(var(--container), calc(100% - 30px));
+            }
+            .developer-nav-inner {
+                min-height: 70px;
+            }
+            .developer-footer {
+                padding-top: 55px;
+            }
+            .developer-footer-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="{% static 'css/developers/style.css' %}"> {% block developer_extra_css %}{% endblock developer_extra_css %}
+</head>
+
+<body>
+
+    <header class="developer-nav">
+        <div class="container developer-nav-inner">
+
+            <a href="{% url 'developers:detail' developer.slug %}" class="developer-logo">
+                <span class="developer-logo-mark">
+                {{ developer.name|first|upper }}
+            </span>
+                <span>{{ developer.name }}</span>
+            </a>
+
+            <ul class="developer-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div class="developer-nav-actions">
+                {% if developer.cv %}
+                <a href="{{ developer.cv.url }}" download class="developer-cv-nav">
+                    <i class="fas fa-download"></i> Download CV
+                </a>
+                {% endif %} {% if developer.email %}
+                <a href="mailto:{{ developer.email }}" class="developer-nav-btn">
+                    Hire Me <i class="fas fa-arrow-up-right-from-square"></i>
+                </a> {% endif %}
+            </div>
+
+            <button class="developer-menu-btn" id="developerMenuBtn" aria-label="Open menu" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+
+            <div class="developer-mobile-menu" id="developerMobileMenu">
+                <a href="#home"><i class="fas fa-house"></i> Home</a>
+                <a href="#about"><i class="fas fa-user"></i> About</a>
+                <a href="#skills"><i class="fas fa-code"></i> Skills</a>
+                <a href="#projects"><i class="fas fa-folder-open"></i> Projects</a>
+                <a href="#experience"><i class="fas fa-briefcase"></i> Experience</a>
+                <a href="#education"><i class="fas fa-graduation-cap"></i> Education</a>
+                <a href="#contact"><i class="fas fa-envelope"></i> Contact</a> {% if developer.cv %}
+                <a href="{{ developer.cv.url }}" target="_blank" class="mobile-cv">
+                    <i class="fas fa-eye"></i> View CV
+                </a>
+                <a href="{{ developer.cv.url }}" download class="mobile-cv">
+                    <i class="fas fa-download"></i> Download CV
+                </a>
+                {% endif %} {% if developer.email %}
+                <a href="mailto:{{ developer.email }}" class="mobile-contact">
+                    Hire Me <i class="fas fa-arrow-right"></i>
+                </a> {% endif %}
+            </div>
+
+        </div>
+    </header>
+
+    {% block content %}{% endblock content %}
+
+    <footer class="developer-footer">
+        <div class="container">
+
+            <div class="developer-footer-grid">
+
+                <div>
+                    <div class="developer-logo">
+                        <span class="developer-logo-mark">
+                        {{ developer.name|first|upper }}
+                    </span> {{ developer.name }}
+                    </div>
+
+                    <p>
+                        {{ developer.bio|default:"Professional developer building modern digital experiences." }}
+                    </p>
+
+                    <div class="developer-socials">
+                        {% if developer.github %}
+                        <a href="{{ developer.github }}" target="_blank" rel="noopener" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% endif %} {% if developer.linkedin %}
+                        <a href="{{ developer.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        {% endif %} {% if developer.instagram %}
+                        <a href="{{ developer.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        {% endif %} {% if developer.website %}
+                        <a href="{{ developer.website }}" target="_blank" rel="noopener" aria-label="Website">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul class="developer-footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#experience">Experience</a></li>
+                        <li><a href="#education">Education</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3>Contact</h3>
+                    <ul class="developer-footer-links">
+                        {% if developer.email %}
+                        <li>
+                            <a href="mailto:{{ developer.email }}">
+                                <i class="fas fa-envelope"></i> {{ developer.email }}
+                            </a>
+                        </li>
+                        {% endif %} {% if developer.phone %}
+                        <li>
+                            <a href="tel:{{ developer.phone }}">
+                                <i class="fas fa-phone"></i> {{ developer.phone }}
+                            </a>
+                        </li>
+                        {% endif %} {% if developer.location %}
+                        <li>
+                            <i class="fas fa-location-dot"></i> {{ developer.location }}
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="developer-copyright">
+                © {% now "Y" %} {{ developer.name }}. All rights reserved.
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        const developerMenuBtn = document.getElementById("developerMenuBtn");
+        const developerMobileMenu = document.getElementById("developerMobileMenu");
+
+        developerMenuBtn.addEventListener("click", () => {
+            const isOpen = developerMobileMenu.classList.toggle("open");
+
+            developerMenuBtn.setAttribute("aria-expanded", isOpen);
+            developerMenuBtn.innerHTML = isOpen ?
+                '<i class="fas fa-xmark"></i>' :
+                '<i class="fas fa-bars"></i>';
+        });
+
+        document.querySelectorAll(".developer-mobile-menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                developerMobileMenu.classList.remove("open");
+                developerMenuBtn.setAttribute("aria-expanded", "false");
+                developerMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 850) {
+                developerMobileMenu.classList.remove("open");
+                developerMenuBtn.setAttribute("aria-expanded", "false");
+                developerMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

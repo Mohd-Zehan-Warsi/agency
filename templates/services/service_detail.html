@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<main class="service-detail">
+
+    <div class="container service-detail-container">
+
+        <!-- =========================
+             SERVICE IMAGE / ICON
+        ========================== -->
+
+        <div class="service-detail-image">
+
+            {% if service.icon %}
+            <center> <img src="{{ service.icon.url }}" alt="{{ service.title }}"> </center>{% else %}
+
+            <div class="service-icon-placeholder">
+                {{ service.icon_text }}
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =========================
+             SERVICE TITLE
+        ========================== -->
+
+        <h1 class="service-detail-title">
+            {{ service.title }}
+        </h1>
+
+
+        <!-- =========================
+             SHORT DESCRIPTION
+        ========================== -->
+
+        {% if service.short_description %}
+
+        <p class="service-short-description">
+            {{ service.short_description }}
+        </p>
+
+        {% endif %}
+
+
+        <!-- =========================
+             FULL DESCRIPTION
+        ========================== -->
+
+        {% if service.description %}
+
+        <div class="service-description">
+
+            {{ service.description|linebreaks }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =========================
+             BACK BUTTON
+        ========================== -->
+
+        <a href="{% url 'services:list' %}" class="service-back">
+            ← Back to Services
+        </a>
+
+    </div>
+
+</main>
+
+{% endblock content %}
